@@ -1,27 +1,22 @@
 // app.js
 
 const express = require('express');
+const db = require('./connection/dbconnection');
 const app = express();
 const port = 3000;
+const userRoute=require('./routes/user')
 
-// Import the MySQL connection from connection.js
-const db = require('./connection/dbconnection');
-require('dotenv').config();
-// Establish the MySQL connection
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
 db.connect((err) => {
   if (err) {
     console.error('Error connecting to MySQL: ' + err.stack);
     return;
   }
   console.log('Connected to MySQL as id ' + db.threadId);
-
-  // Your application logic can go here, using the 'db' connection object
 });
-
+app.use("/",userRoute)
 app.get('/', (req, res) => {
   res.send('Hello, World!');
-});
-
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
 });
